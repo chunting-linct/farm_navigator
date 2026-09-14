@@ -23,49 +23,66 @@ driver_2 = {
 }
 
 
-def a_1_foward(driver):
+def a_foward(driver: dict[str, DigitalOutputDevice]):
     driver["stby"].on()
     driver["pwma"].on()
     driver["ain1"].on()
     driver["ain2"].off()
-    sleep(2)
-    for pin in driver:
-        driver[pin].off()
-def a_1_backward(driver):
+def a_backward(driver: dict[str, DigitalOutputDevice]):
     driver["stby"].on()
     driver["pwma"].on()
     driver["ain1"].off()
     driver["ain2"].on()
-    sleep(2)
-    for pin in driver:
-        driver[pin].off()
 
-def b_1_foward(driver):
+def b_forward(driver: dict[str, DigitalOutputDevice]):
     driver["stby"].on()
     driver["pwmb"].on()
     driver["bin1"].on()
     driver["bin2"].off()
-    sleep(2)
-    for pin in driver:
-        driver[pin].off()
 
-def b_1_backward(driver):
+def b_backward(driver: dict[str, DigitalOutputDevice]):
     driver["stby"].on()
     driver["pwmb"].on()
     driver["bin1"].off()
     driver["bin2"].on()
+def stop(driver : dict[str, DigitalOutputDevice]):
+    for key in driver:
+        driver[key].off()
+
+def all_forward():
+    a_foward(driver_1)
+    a_foward(driver_2)
+    b_forward(driver_1)
+    b_forward(driver_2)
     sleep(2)
-    for pin in driver:
-        driver[pin].off()
+    stop(driver_1)
+    stop(driver_2)
 
+def all_backward():
+    a_backward(driver_1)
+    a_backward(driver_2)
+    b_backward(driver_1)
+    b_backward(driver_2)
+    sleep(2)
+    stop(driver_1)
+    stop(driver_2)
+def one_side_forward():
+    a_foward(driver_1)
+    b_forward(driver_1)
+    sleep(2)
+    stop(driver_1)
 
+def turn():
+    a_foward(driver_1)
+    b_forward(driver_1)
+    a_backward(driver_2)
+    b_backward(driver_2)
+    sleep(2)
+    stop(driver_1)
+    stop(driver_2)
 
 if __name__ == '__main__':
-    a_1_foward(driver_1)
-    a_1_backward(driver_1)
-    b_1_foward(driver_1)
-    b_1_backward(driver_1)
-    a_1_foward(driver_2)
-    a_1_backward(driver_2)
-    b_1_foward(driver_2)
-    b_1_backward(driver_2)
+    all_forward()
+    all_backward()
+    one_side_forward()
+    turn()
